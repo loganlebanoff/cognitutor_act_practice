@@ -1,0 +1,221 @@
+ACT 1 Concepts
+English
+1.	B; Style/Tone
+2.	F; Style/Tone
+3.	D; Subject-verb agreement
+4.	G; Modifiers
+5.	B; Concise/not redundant
+6.	J; Articles
+7.	A; Add/Revise/Delete sentence
+8.	G; Style/Tone
+9.	C; Commas
+10.	H; Style/Tone
+11.	D; Transition words
+12.	G; Parallel structure
+13.	A; Style/Tone
+14.	H; Parallel structure
+15.	C; Commas
+16.	F; Concise/not redundant
+17.	C; Synonyms
+18.	G; Punctuation
+19.	A; Add/revise/delete sentence
+20.	J; Active/passive voice
+21.	D; Transition words
+22.	H; Organization
+23.	C; Punctuation
+24.	F; Tense
+25.	B; Tense
+26.	J; Reading comprehension
+27.	A; Concise/not redundant
+28.	J; Concise/not redundant
+29.	C; Possession
+30.	F; Prepositions
+31.	D; Possession
+32.	G; Active/passive voice
+33.	B; Easily confused words
+34.	J; Add/revise/delete sentence
+35.	C; Punctuation
+36.	H; Active/passive voice
+37.	A; Possession
+38.	J; Subject-verb agreement
+39.	D; Style/tone
+40.	G; Transition words
+41.	F; Add/revise/delete sentence
+42.	F; Pronoun agreement
+43.	D; Concise/not redundant
+44.	F; Reading comprehension
+45.	D; Organization
+46.	G; Concise/not redundant
+47.	C; Pronoun agreement
+48.	F; Add/revise/delete sentence
+49.	B; Punctuation
+50.	F; Amplifiers
+51.	C; Adjectives
+52.	J; Transition words
+53.	A; Transition words
+54.	F; Style/tone
+55.	A; Organization
+56.	J; Subject-verb agreement
+57.	C; Prepositions
+58.	G; Organization
+59.	C; Punctuation
+60.	J; Comprehension
+61.	A; Punctuation
+62.	G; Punctuation
+63.	C; Parallel structure
+64.	G; Active/passive voice
+65.	A; Easily confused words
+66.	H; Modifiers
+67.	D; Punctuation
+68.	H; Tense
+69.	B; Modifiers
+70.	F; Add/revise/delete sentence
+71.	A; Style/tone
+72.	J; Organization
+73.	B; Style/tone
+74.	G; Add/revise/delete sentence
+75.	C; Transition words
+Math
+1.	B; Absolute value
+2.	J; solving equations
+3.	B; solving equations
+4.	G; Solving equations
+5.	C; Perimeter, area, and volume
+6.	F; Expanding
+7.	B; Percentages
+8.	H; Solving equations
+9.	C; Midpoint
+10.	F; Distance
+11.	B; Permutations and Combinations
+12.	G; Unknown Angles
+13.	E; Percentages
+14.	H; Percentages
+15.	D; Percentages
+16.	G; Proportions
+17.	D; Slope-intercept
+18.	G; Proportions
+19.	D; Exponents and radicals
+20.	F; perimeter, area, and volume
+21.	C; Factoring
+22.	G; Exponents and radicals
+23.	C; Logic
+24.	K; solving equations
+25.	A; Triangles
+26.	K; Exponents and radicals
+27.	A; solving equations
+28.	G; Permutations and combinations
+29.	C; Perimeter, area, and volume
+30.	J; Solving equations
+31.	D; Perimeter, area, and volume
+32.	G; Inverse and composite functions
+33.	D; Mean, median, and mode
+34.	K; Unknown angles
+35.	A; Exponents and radicals
+36.	F; Inequalities
+37.	D; Circles
+38.	G; Right triangles
+39.	A; Unknown angles
+40.	F; Scientific notation
+41.	C; Inscribed angles
+42.	H; Fractions
+43.	D; Unknown angles
+44.	G; Perimeter, area, and volume
+45.	B; Exponents and radicals
+46.	J; Absolute value
+47.	E; Mean, median, and mode
+48.	K; The Complex plane
+49.	A; Exponents and radicals
+50.	F; Period and amplitude
+51.	D; Probability
+52.	H; Slope-intercept
+53.	D; Right triangles
+54.	K; Perimeter, area, and volume
+55.	C; Circles
+56.	K; Circles
+57.	E; Interpreting graphs
+58.	K; Word problems
+59.	E; Distance
+60.	K; Sequences
+Reading
+1.	D; Structure of Passage; Prose Fiction
+2.	F; Author's Voice/Tone; Prose Fiction
+3.	C; Reasonable inference; Prose Fiction
+4.	G; Function of word/phrase; Prose Fiction
+5.	A; Inference; Prose Fiction
+6.	H; Reasonable inference; Prose Fiction
+7.	A; Evidence; Prose Fiction
+8.	G; Evidence; Prose Fiction
+9.	B; Vocabulary; Prose Fiction
+10.	H; Detail; Prose Fiction
+11.	A; Author's Voice/Tone; Social Science
+12.	F; Main Idea; Social Science
+13.	C; Evidence; Social Science
+14.	J; Evidence; Social Science
+15.	A; Author's Voice/Tone; Social Science
+16.	G; Evidence; Social Science
+17.	D; Detail; Social Science
+18.	H; Detail; Social Science
+19.	D; Detail; Social Science
+20.	G; Evidence; Social Science
+21.	C; Main Idea; Humanities
+22.	G; Detail; Humanities
+23.	A; Author's Voice/Tone; Humanities
+24.	G; Function of word/phrase; Humanities
+25.	D; Detail; Humanities
+26.	G; Detail; Humanities
+27.	D; Main idea; Humanities
+28.	G; Detail; Humanities
+29.	D; Generalization; Humanities
+30.	H; Vocabulary; Humanities
+31.	D; Detail; Natural Science
+32.	F; Evidence; Natural Science
+33.	B; Inference; Natural Science
+34.	J; Cause/effect; Natural Science
+35.	A; Main idea; Natural Science
+36.	H; Detail; Natural Science
+37.	C; Detail; Natural Science
+38.	G; Vocabulary; Natural Science
+39.	D; Detail; Natural Science
+40.	H; Inference; Natural Science
+Science
+1.	C; Experimental design; Data Representation
+2.	J; Inference; Data Representation
+3.	C; Pattern; Data Representation
+4.	J; Compare/contrast; Data Representation
+5.	A; Experimental design; Data Representation
+6.	J; Experimental design; Data Representation
+7.	B; Experimental design; Data Representation
+8.	G; Experimental design; Data Representation
+9.	D; Experimental design; Data Representation
+10.	H; Calculation; Data Representation
+11.	A; Inference; Research Summaries
+12.	G; Experimental design; Research Summaries
+13.	A; Experimental design; Research Summaries
+14.	G; Inference; Research Summaries
+15.	C; Pattern; Research Summaries
+16.	G; Pattern; Research Summaries
+17.	C; Experimental design; Data Representation
+18.	J; Prior knowledge; Data Representation
+19.	A; Experimental design; Data Representation
+20.	G; Prior knowledge; Data Representation
+21.	A; Inference; Data Representation
+22.	G; Experimental design; Research Summaries
+23.	A; Inference; Research Summaries
+24.	F; Inference; Research Summaries
+25.	B; Inference; Research Summaries
+26.	F; Inference; Research Summaries
+27.	D; Experimental design; Research Summaries
+28.	H; Experimental design; Research Summaries
+29.	A; Pattern; Research Summaries
+30.	H; Inference; Research Summaries
+31.	A; Experimental design; Research Summaries
+32.	G; Experimental design; Research Summaries
+33.	D; Inference; Research Summaries
+34.	F; Understanding; Conflicting Viewpoints
+35.	D; Inference; Conflicting Viewpoints
+36.	F; Compare/contrast; Conflicting Viewpoints
+37.	B; Understanding; Conflicting Viewpoints
+38.	J; Understanding; Conflicting Viewpoints
+39.	A; Understanding; Conflicting Viewpoints
+40.	G; Experimental design; Conflicting Viewpoints
+

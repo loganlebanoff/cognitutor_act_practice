@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+
+    <script type="text/javascript" src="js/sessionvars.js"></script>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.js"></script>
+
+    <style>
+        /* body {
+            padding-top: 40px;
+        } */
+        .border-between > [class*='col-']:before {
+        background: #e3e3e3;
+        bottom: 0;
+        content: " ";
+        left: 0;
+        position: absolute;
+        width: 1px;
+        top: 0;
+        }
+
+        .border-between > [class*='col-']:first-child:before {
+        display: none;
+        }
+    </style>
+
+    <script>
+        String.prototype.replaceAt=function(index, replacement) {
+            return this.substr(0, index) + replacement+ this.substr(index + replacement.length);
+        }
+        function isAlpha(str) {
+            return /^[a-zA-Z]+$/.test(str);
+        }
+        function toTitleCase(str) {
+            for (var i=0;i<str.length;i++) {
+                if (isAlpha(str[i]) && (i == 0 || (!isAlpha(str[i-1]) && str[i-1] != "'"))) {
+                    str = str.replaceAt(i, str[i].toUpperCase())
+                }
+            }
+            return str
+        }
+        maxCategories = 4
+        var default_colors = ['#3366CC','#DC3912','#FF9900','#109618','#990099','#3B3EAC','#0099C6','#DD4477','#66AA00',
+            '#B82E2E','#316395','#994499','#22AA99','#AAAA11','#6633CC','#E67300','#8B0707','#329262','#5574A6','#3B3EAC',
+            '#3366CC','#DC3912','#FF9900','#109618','#990099','#3B3EAC','#0099C6','#DD4477','#66AA00',
+            '#B82E2E','#316395','#994499','#22AA99','#AAAA11','#6633CC','#E67300','#8B0707','#329262','#5574A6','#3B3EAC']
+        var default_colors_limited = default_colors.slice(0,maxCategories).concat(['gray'])
+        
+        sections = ["English", "Math", "Science", "Reading"]
+        barSections = ["Reading", "Science"]
+        sessvars.incorrectCountsLimitedData = {}
+        sessvars.incorrectCountsLimitedLabels = {}
+        sessvars.incorrectCountsAllData = {}
+        sessvars.incorrectCountsAllLabels = {}
+        sessvars.difficultyCountsLimitedData = {}
+        sessvars.difficultyCountsLimitedLabels = {}
+        sessvars.difficultyCountsAllData = {}
+        sessvars.difficultyCountsAllLabels = {}
+        data = {}
+        labels = {}
+        barData = {}
+        barLabels = {}
+        for (var sectionIdx=0;sectionIdx<sections.length;sectionIdx++) {
+            section = sections[sectionIdx]
+            userEnglishAnswers = sessvars.userAnswers[section]
+            correctEnglishAnswers = sessvars.correctAnswers[section]
+            incorrectCounts = {}
+            barIncorrectCounts = {}
+            difficultyCounts = {}
+            for (var i=0;i<userEnglishAnswers.length;i++) {
+                if (userEnglishAnswers[i].length == 0) {
+                    answer = undefined
+                }
+                else {
+                    answer = userEnglishAnswers[i][0]
+                    difficulty = userEnglishAnswers[i][1]
+                }
+                correctAnswer = correctEnglishAnswers[i][0]
+                if (answer != correctAnswer) {
+                    label = toTitleCase(correctEnglishAnswers[i][1])
+                    if (!(label in incorrectCounts)) {
+                        incorrectCounts[label] = 0
+                    }
+                    incorrectCounts[label] += 1
+                    if (barSections.includes(section)) {
+                        barLabel = toTitleCase(correctEnglishAnswers[i][2])
+                        if (!(barLabel in barIncorrectCounts)) {
+                            barIncorrectCounts[barLabel] = 0
+                        }
+                        barIncorrectCounts[barLabel] += 1
+                        
+                    }
+                }
+                if (difficulty) {
+                    label = toTitleCase(correctEnglishAnswers[i][1])
+                    if (!(label in difficultyCounts)) {
+                        difficultyCounts[label] = 0
+                    }
+                    difficultyCounts[label] += 1
+                }
+            }
+            // Create items array
+            var items = Object.keys(incorrectCounts).map(function(key) {
+                return [key, incorrectCounts[key]];
+            });
+
+            // Sort the array based on the second element
+            items.sort(function(first, second) {
+                return second[1] - first[1];
+            });
+
+            incorrectCountsAll = items
+
+            // Create a new array with only the first 5 items
+            incorrectCountsLimited = items.slice(0, maxCategories);
+            allOthers = items.slice(maxCategories)
+            total = 0
+            for (var i=0;i<allOthers.length;i++) {
+                total += allOthers[i][1]
+            }
+            incorrectCountsLimited = incorrectCountsLimited.concat([["Others", total]])
+
+            sessvars.incorrectCountsLimitedData[section] = []
+            sessvars.incorrectCountsLimitedLabels[section] = []
+            for (var i=0;i<incorrectCountsLimited.length;i++) {
+                item = incorrectCountsLimited[i]
+                sessvars.incorrectCountsLimitedData[section].push(item[1])
+                sessvars.incorrectCountsLimitedLabels[section].push(item[0])
+            }
+            
+            sessvars.incorrectCountsAllData[section] = []
+            sessvars.incorrectCountsAllLabels[section] = []
+            for (var i=0;i<incorrectCountsAll.length;i++) {
+                item = incorrectCountsAll[i]
+                sessvars.incorrectCountsAllData[section].push(item[1])
+                sessvars.incorrectCountsAllLabels[section].push(item[0])
+            }
+
+            
+            // Create items array
+            var items = Object.keys(difficultyCounts).map(function(key) {
+                return [key, difficultyCounts[key]];
+            });
+
+            // Sort the array based on the second element
+            items.sort(function(first, second) {
+                return second[1] - first[1];
+            });
+
+            difficultyCountsAll = items
+
+            // Create a new array with only the first 5 items
+            difficultyCountsLimited = items.slice(0, maxCategories);
+            allOthers = items.slice(maxCategories)
+            total = 0
+            for (var i=0;i<allOthers.length;i++) {
+                total += allOthers[i][1]
+            }
+            difficultyCountsLimited = difficultyCountsLimited.concat([["Others", total]])
+
+            sessvars.difficultyCountsLimitedData[section] = []
+            sessvars.difficultyCountsLimitedLabels[section] = []
+            for (var i=0;i<difficultyCountsLimited.length;i++) {
+                item = difficultyCountsLimited[i]
+                sessvars.difficultyCountsLimitedData[section].push(item[1])
+                sessvars.difficultyCountsLimitedLabels[section].push(item[0])
+            }
+            
+            sessvars.difficultyCountsAllData[section] = []
+            sessvars.difficultyCountsAllLabels[section] = []
+            for (var i=0;i<difficultyCountsAll.length;i++) {
+                item = difficultyCountsAll[i]
+                sessvars.difficultyCountsAllData[section].push(item[1])
+                sessvars.difficultyCountsAllLabels[section].push(item[0])
+            }
+
+
+            if (barSections.includes(section)) {
+
+                // Create items array
+                var items = Object.keys(barIncorrectCounts).map(function(key) {
+                    return [key, barIncorrectCounts[key]];
+                });
+
+                // Sort the array based on the second element
+                items.sort(function(first, second) {
+                    return second[1] - first[1];
+                });
+
+                // Create a new array with only the first 5 items
+                barIncorrectCounts = items
+
+                keys = Object.keys(barIncorrectCounts)
+                keys.sort()
+                barData[section] = []
+                barLabels[section] = []
+                for (var i=0;i<barIncorrectCounts.length;i++) {
+                    item = barIncorrectCounts[i]
+                    barData[section].push(item[1])
+                    barLabels[section].push(item[0])
+                }
+            }
+        }
+
+        charts = {}
+        ctxs = {}
+        $( document ).ready(function() {
+            a=0
+            for (var sectionIdx=0;sectionIdx<sections.length;sectionIdx++) {
+                section = sections[sectionIdx]
+                diff_or_no_diff = ["", "Diff"]
+                for (var diffIdx=0;diffIdx<diff_or_no_diff.length;diffIdx++) {
+                    if (diff_or_no_diff[diffIdx] == "") {
+                        data = sessvars.incorrectCountsLimitedData[section]
+                        labels = sessvars.incorrectCountsLimitedLabels[section]
+                    }
+                    else {
+                        data = sessvars.difficultyCountsLimitedData[section]
+                        labels = sessvars.difficultyCountsLimitedLabels[section]
+                    }
+                    var canvas = document.getElementById("ch" + section + diff_or_no_diff[diffIdx])
+                    var ctx = canvas.getContext('2d');
+                    var myChart = new Chart(ctx, {
+                        type: 'pie',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                data: data,
+                                backgroundColor: default_colors_limited,
+                                sectionName: section,
+                                isDifficulty: diff_or_no_diff[diffIdx] != ""
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            axes: {
+                                display: false
+                            }
+                        }
+                    });
+                    canvas.addEventListener('click', handleEvent(myChart, ctx));
+                }
+            }
+
+            
+            for (var sectionIdx=0;sectionIdx<barSections.length;sectionIdx++) {
+                section = barSections[sectionIdx]
+                var ctx = document.getElementById("bar" + section).getContext('2d');
+                var myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: barLabels[section],
+                        datasets: [{
+                            data: barData[section],
+                            backgroundColor: default_colors,
+                            label: "Passages"
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero:true
+                                }
+                            }],
+                            xAxes: [{
+                                ticks: {
+                                    autoSkip: false
+                                }
+                            }]
+                        },
+                        legend: {
+                            display: false
+                        }
+                    }
+                });
+            }
+
+        });
+
+        // return our event handler while capturing an argument in the closure
+        function handleEvent(chart_, ctx_) {
+            return function(evt) {
+                
+                var activePoints = chart_.getElementsAtEvent(evt);
+                if (activePoints[0]) {
+                    var chartData = activePoints[0]['_chart'].config.data;
+                    var idx = activePoints[0]['_index'];
+
+                    var label = chartData.labels[idx];
+                    var value = chartData.datasets[0].data[idx];
+                    var section = chartData.datasets[0].sectionName
+                    var isDifficulty = chartData.datasets[0].isDifficulty
+
+                    if (label == 'Others') {
+                        
+                        if (!isDifficulty) {
+                            data = sessvars.incorrectCountsAllData[section]
+                            labels = sessvars.incorrectCountsAllLabels[section]
+                        }
+                        else {
+                            data = sessvars.difficultyCountsAllData[section]
+                            labels = sessvars.difficultyCountsAllLabels[section]
+                        }
+
+                        chart_.destroy();
+                        var myChart = new Chart(ctx_, {
+                            type: 'pie',
+                            data: {
+                                labels: labels,
+                                datasets: [{
+                                    data: data,
+                                    backgroundColor: default_colors,
+                                    sectionName: section
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                axes: {
+                                    display: false
+                                }
+                            }
+                        });
+                    }
+                }
+            };
+        }
+
+        
+        function onSubmit() {
+        }
+    </script>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class='row pt-4 pb-3 border-between'>
+            <div class='col-lg-6'>
+                <h3 class="text-center pb-3">English</h3>
+                
+                
+                <h5>Concepts Missed</h3>
+                <canvas id="chEnglish" width="400" height="400"></canvas>
+                <h5 class="pt-4">Concepts Hard/Guessed</h3>
+                <canvas id="chEnglishDiff" width="400" height="400"></canvas>
+            </div>
+            <div class='col-lg-6'>
+                <h3 class="text-center pb-3">Math</h3>
+                
+                <h5>Concepts Missed</h3>
+                <canvas id="chMath" width="400" height="400"></canvas>
+                <h5 class="pt-4">Concepts Hard/Guessed</h3>
+                <canvas id="chMathDiff" width="400" height="400"></canvas>
+            </div>
+        </div>
+        <hr>
+        <div class='row pt-3 border-between'>
+            <div class='col-lg-6'>
+                <h3 class="text-center pb-3">Reading</h3>
+
+                <h5>Concepts Missed</h3>
+                <canvas id="chReading" width="400" height="400"></canvas>
+                <h5 class="pt-4">Concepts Hard/Guessed</h3>
+                <canvas id="chReadingDiff" width="400" height="400"></canvas>
+                <h5 class="pt-4">Passages Missed</h3>
+                <canvas id="barReading" width="400" height="200"></canvas>
+            </div>
+            <div class='col-lg-6'>
+                <h3 class="text-center pb-3">Science</h3>
+
+                <h5>Concepts Missed</h3>
+                <canvas id="chScience" width="400" height="400"></canvas>
+                <h5 class="pt-4">Concepts Hard/Guessed</h3>
+                <canvas id="chScienceDiff" width="400" height="400"></canvas>
+                <h5 class="pt-4">Passages Missed</h3>
+                <canvas id="barScience" width="400" height="200"></canvas>
+            </div>
+        </div>
+        
+        <form>
+            <button type="submit" class="btn btn-primary" onclick="onSubmit()">Start Test!</button>
+        </form>
+
+    </div>
+
+<!-- Content will go here -->
+
+</body>
+</html>

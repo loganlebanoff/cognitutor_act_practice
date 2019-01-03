@@ -1,0 +1,223 @@
+ACT 2
+English
+1.	D; Comma Use
+2.	F; Subject/Verb agreement
+3.	B; Pronoun-antecedent agreement
+4.	J; Punctuation 
+5.	A; Relevancy
+6.	G; Transition words
+7.	A; Relevancy & writer's goal
+8.	G; Parallel structure
+9.	A; Be concise
+10.	J; Comma use
+11.	C; Relevancy
+12.	J; Transition words
+13.	A; Comma use
+14.	G; Apostrophes 
+15.	C; Writer's goal
+16.	J; Comma use
+17.	B; Punctuation
+18.	J; Organization
+19.	A; Be concise
+20.	F; Relevancy
+21.	C; Pronoun-antecedent agreement
+22.	F; Comma use
+23.	A; Diction and Register
+24.	J; Be concise 
+25.	B; Punctuation 
+26.	F; Pronoun antecedent agreement 
+27.	A; Transition words
+28.	H; Relevancy
+29.	D; Organization
+30.	G; Relevancy
+31.	C; Subject/Verb agreement
+32.	J; Sentence structure
+33.	A; Be concise
+34.	H; Transition words
+35.	C; Subject/verb agreement
+36.	G; Punctuation 
+37.	D; subject/verb agreement
+38.	H; Comma use
+39.	A; Relevancy
+40.	J; Transition words
+41.	C; Subject/verb agreement
+42.	F; Relevancy
+43.	C; Transition words
+44.	F; Transition words
+45.	D; Comma use
+46.	G; Punctuation
+47.	A; Transition words
+48.	G; Relevancy
+49.	D; Pronoun-antecedent agreement
+50.	G; Pronoun-antecedent agreement
+51.	C; Organization
+52.	H; Be concise
+53.	B; Verb Tense
+54.	J; Relevancy
+55.	D; Diction and Register
+56.	J; Modifiers
+57.	C; Diction and Register
+58.	H; Diction and Register
+59.	B; Relevancy
+60.	J; Organization
+61.	C; Be concise
+62.	F; Comma use
+63.	B; Comma use
+64.	F; Relevancy
+65.	D; Relevancy
+66.	H; Relevancy
+67.	B; Relevancy
+68.	G; Be concise
+69.	C; Relevancy
+70.	J; Subject/verb agreement
+71.	D; Comma use
+72.	F; Transition words
+73.	B; Commonly confused words
+74.	H; Comma use
+75.	D; Organization
+Math
+1.	A; Solving equations
+2.	K; Solving equations
+3.	B; Systems of equations
+4.	G; Statistics
+5.	E; Solving equations
+6.	H; Solving equations
+7.	E; Solving equations
+8.	G; Solving equations
+9.	B; Expanding
+10.	J; Perimeter, area, and volume
+11.	E; Unknown angles
+12.	J; Probability
+13.	B; Sequences
+14.	G; Solving equations
+15.	C; Exponents
+16.	G; Fractions
+17.	A; Perimeter, area, and volume
+18.	H; Circles
+19.	C; Exponents
+20.	K; Perimeter, area, and volume
+21.	B; Vectors
+22.	K; Triangles
+23.	A; Circles
+24.	F; Slope, perpendicular and parallel slope
+25.	D; Expanding
+26.	J; Absolute value
+27.	A; Triangles
+28.	H; Solving equations
+29.	C; Inequalities
+30.	G; Perimeter, area, and volume
+31.	E; Triangles
+32.	F; Probability
+33.	C; Slope-intercept
+34.	J; Slope-intercept
+35.	B; Proportions
+36.	K; Circles
+37.	C; Perimeter, area, and volume
+38.	J; Perimeter, area, and volume
+39.	C; Midpoint
+40.	H; Perimeter, area, and volume
+41.	A; Slope, perpendicular and parallel slope
+42.	F; Triangles
+43.	D; Percents
+44.	F; Circles
+45.	C; Circles
+46.	K; Sectors and arcs
+47.	C; Unknown angles
+48.	J; Inscribed Angles
+49.	D; Systems of equations
+50.	J; Slope, perpendicular and parallel slope
+51.	E; Percents
+52.	J; Solving equations
+53.	A; Matrices
+54.	K; Solving equations
+55.	B; Inequalities
+56.	H; Triangles
+57.	A; Triangles
+58.	K; Sequences
+59.	E; Solving equations
+60.	J; Absolute value
+Reading
+1.	B; Point of View; Prose Fiction
+2.	J; Literal Comprehension; Prose Fiction
+3.	C; Literal Comprehension; Prose Fiction
+4.	F; Reasonable Inference; Prose Fiction
+5.	C; Literal Comprehension; Prose Fiction
+6.	J; Literal Comprehension; Prose Fiction
+7.	A; Reasonable Inference; Prose Fiction
+8.	H; Literal Comprehension; Prose Fiction
+9.	D; Literal Comprehension; Prose Fiction
+10.	G; Literal Comprehension; Prose Fiction
+11.	B; Inference; Social Studies
+12.	F; Literal Comprehension; Social Studies
+13.	D; Inference; Social Studies
+14.	J; Main Idea; Social Studies
+15.	D; Main Idea; Social Studies
+16.	G; Literal Comprehension; Social Studies
+17.	A; Literal Comprehension; Social Studies
+18.	F; Literal Comprehension; Social Studies
+19.	C; Literal Comprehension; Social Studies
+20.	H; Literal Comprehension; Social Studies
+21.	A; Point of View; Humanities
+22.	H; Literal Comprehension; Humanities
+23.	C; Main Idea; Humanities
+24.	J; Literal Comprehension; Humanities
+25.	D; Literal Comprehension; Humanities
+26.	G; Literal Comprehension; Humanities
+27.	D; Inference; Humanities
+28.	F; Inference; Humanities
+29.	C; Tone; Humanities
+30.	G; Literal Comprehension; Humanities
+31.	B; Main Idea; Natural Sciences
+32.	J; Literal Comprehension; Natural Sciences
+33.	B; Main Idea; Natural Sciences
+34.	H; Literal Comprehension; Natural Sciences
+35.	A; Literal Comprehension; Natural Sciences
+36.	F; Vocab in Context; Natural Sciences
+37.	C; Vocab in Context; Natural Sciences
+38.	G; Literal Comprehension; Natural Scienceson
+39.	D; Literal Comprehension; Natural Sciences
+40.	H; Literal Comprehension; Natural Sciences
+
+
+Science
+1.	B; Experimental Design; Research Summary
+2.	J; Experimental Design; Research Summary
+3.	C; Experimental Design; Research Summary
+4.	F; Experimental Design; Research Summary
+5.	A; Hypothetical; Research Summary
+6.	J; Interpretation; Research Summary
+7.	D; Experimental Design; Research Summary
+8.	G; Experimental Design; Research Summary
+9.	C; Interpretation; Research Summary
+10.	H; Hypothetical; Research Summary
+11.	D; Experimental Design; Research Summary
+12.	H; Experimental Design; Research Summary
+13.	B; Fact; Data Representation
+14.	F; Calculation; Data Representation
+15.	C; Pattern; Data Representation
+16.	J; Fact; Data Representation
+17.	A; Pattern; Data Representation
+18.	F; Experimental Design; Research Summary
+19.	B; Experimental Design; Research Summary
+20.	F; Hypothetical; Research Summary
+21.	B; Experimental Design; Research Summary
+22.	G; Hypothetical; Research Summary
+23.	A; Interpretation; Research Summary
+24.	H; Understanding; Conflicting Viewpoints
+25.	D; Understanding; Conflicting Viewpoints
+26.	G; Understanding; Conflicting Viewpoints
+27.	B; Understanding; Conflicting Viewpoints
+28.	F; Understanding; Conflicting Viewpoints
+29.	C; Understanding; Conflicting Viewpoints
+30.	F; Understanding; Conflicting Viewpoints
+31.	D; Hypothetical; Research Summary
+32.	G; Hypothetical; Research Summary
+33.	C; Experimental Design; Research Summary
+34.	J; Interpretation; Research Summary
+35.	C; Interpretation; Research Summary
+36.	H; Experimental Design; Data Representation
+37.	D; Experimental Design; Data Representation
+38.	G; Experimental Design; Data Representation
+39.	C; Hypothetical; Data Representation
+40.	J; Experimental Design; Data Representation
+

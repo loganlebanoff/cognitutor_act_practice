@@ -1,0 +1,20 @@
+just answers
+all 5 choices
+
+
+do you have a learning disability? should it be yes, and then enter the type of disability? Should it be multiple choice?
+So I allow the student to continue if they want to, even after the time is up?
+	i'm done or continue
+Do you already have the answers and categories and difficulties in a specific format? I would like csv
+	2 buttons. with semicolons
+Concepts sheets: are those page 1 and 2? Should it include the pre questions?
+	do include questions
+	multiple choice question for which test
+Concepts marked hard/guess? what is that
+Pie charts and bar charts? why both
+	based on passage
+	3rd entry for passage
+should i have the web page make a timer sound when time is up?
+	nothing extravagant popup ding sound
+
+get access to website

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+    <script type="text/javascript" src="js/sessionvars.js"></script>
+
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
+    <style>
+        body {
+            padding-top: 40px;
+        }
+        .radio-inline{margin: 0 10px};
+    </style>
+
+    
+
+    <script>
+        if(typeof(String.prototype.trim) === "undefined")
+        {
+            String.prototype.trim = function() 
+            {
+                return String(this).replace(/^\s+|\s+$/g, '');
+            };
+        }
+        AE = ['A','B','C','D','E']
+        FK = ['F','G','H','J','K']
+        
+        var testSections = ["English", "Math", "Break1", "Reading", "Science", "Break2", "Writing"]
+        var timings = {
+            "English": 70,
+            "Math": 90,
+            "Break1": 15,
+            "Reading": 55,
+            "Science": 55,
+            "Break2": 5,
+            "Writing": 60
+        };
+
+        var testSection = testSections[sessvars.sectionIdx]
+        var timing = timings[testSection]
+        
+        if (!(testSection.includes("Break") || testSection.includes("Writing"))) {
+            curAnswers = sessvars.correctAnswers[testSection]
+        }
+
+
+
+        $( document ).ready(function() {
+            
+            if (testSection.includes("Break")) {
+                $("#modAlert").modal("show");
+                $("#btnStay").hide();
+                $("#tiAlert").html("BREAK");
+                $("#divAlert").html(`Taking a ${timings[testSection]}-minute break.`);
+
+                var now = new Date().getTime();
+                var countDownDate = new Date();
+                countDownDate.setTime(now + (timings[testSection] * 60 * 1000));
+                countDownDate = countDownDate.getTime();
+
+                // Update the count down every 1 second
+                var x = setInterval(function() {
+
+                // Get todays date and time
+                var now = new Date().getTime();
+                    
+                // Find the distance between now and the count down date
+                var distance = countDownDate - now;
+                    
+                // Time calculations for days, hours, minutes and seconds
+                var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                    
+                // Output the result in an element with id="demo"
+                document.getElementById("lblTimer").innerHTML = minutes + "m " + seconds + "s ";
+                    
+                // If the count down is over, write some text 
+                if (distance < 0) {
+                    clearInterval(x);
+                    document.getElementById("lblTimer").innerHTML = "EXPIRED";
+                }
+                }, 1000);
+            }
+            else {
+                $("#modBegin").modal("show");
+                $("#lbl_Section").text(testSection);
+
+                for (i=0; i<curAnswers.length; i++) {
+                    if (AE.includes(curAnswers[i][0])) {
+                        possibleAnswers = AE
+                    }
+                    else {
+                        possibleAnswers = FK
+                    }
+                    questionHtml = `
+                        <div class='row'>
+                            <label class="col-sm-1 control-label">${i+1}.</label>
+                            <div class="col-sm-5">
+                                <label class="radio-inline"> <input type="radio" name="q${i}" id="aA" value="${possibleAnswers[0]}"> ${possibleAnswers[0]} </label>
+                                <label class="radio-inline"> <input type="radio" name="q${i}" id="aB" value="${possibleAnswers[1]}"> ${possibleAnswers[1]} </label>
+                                <label class="radio-inline"> <input type="radio" name="q${i}" id="aC" value="${possibleAnswers[2]}"> ${possibleAnswers[2]} </label>
+                                <label class="radio-inline"> <input type="radio" name="q${i}" id="aD" value="${possibleAnswers[3]}"> ${possibleAnswers[3]} </label>
+                                <label class="radio-inline"> <input type="radio" name="q${i}" id="aE" value="${possibleAnswers[4]}"> ${possibleAnswers[4]} </label>
+                            </div>
+                            
+                            <div class="col-sm-5">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" type="checkbox" value="Yes" id="cbHard_${i}">
+                                Hard/Guessed </label>
+
+                            </div>
+                        </div>
+                    `;
+
+                    
+                                // <label class="radio-inline"> 
+                                //     <select class="form-control" id="sel_${i}">
+                                //     <option>Ok</option>
+                                //     <option>Hard</option>
+                                //     <option>Guessed</option>
+                                //     </select> 
+                                // </label>
+
+                    $( questionHtml ).appendTo( "#form" );
+                }
+            }
+            $("tiAlert").html((testSection + " Test").toUpperCase());
+        });
+        
+        function onSubmit() {
+            $('#modAlert').modal('hide');
+
+            if (!(testSection.includes("Break") || testSection.includes("Writing"))) {
+                userAnswers = sessvars.userAnswers
+                userAnswersForSection = []
+                userDifficultyForSection = []
+                for (i=0; i<curAnswers.length; i++) {
+                    ans = $(`input[name=q${i}]:checked`).val()
+                    dif = $( `#cbHard_${i}` ).prop('checked')
+                    userAnswersForSection.push([ans, dif])
+                }
+                userAnswers[testSection] = userAnswersForSection
+                sessvars.userAnswers = userAnswers
+            }
+
+            sessvars.sectionIdx += 1
+            if (sessvars.sectionIdx >= testSections.length) {
+                window.location = "stats.html";
+                return false;
+            }
+        }
+
+        function modalSubmit() {
+            document.getElementById("btnSubmit").click();
+        }
+
+        function modalBegin() {
+            $("#modBegin").modal("hide");
+            //Start timer
+        }
+    </script>
+</head>
+
+<body>
+
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modAlert">
+        Launch demo modal
+    </button>
+    
+    <!-- Modal -->
+    <div class="modal fade" id="modAlert" tabindex="-1" role="dialog" aria-labelledby="lblAlert" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h3 class="modal-title" id="tiAlert">Modal title</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <div id="divAlert"></div>
+                <p id="lblTimer"></p>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btnStay">Stay on this section</button>
+            <button type="submit" class="btn btn-primary" onclick="modalSubmit()">Move on to next section</button>
+            </div>
+        </div>
+        </div>
+    </div>
+    
+    <!-- Modal -->
+    <div class="modal fade" id="modBegin" tabindex="-1" role="dialog" aria-labelledby="lblBegin" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h3 class="modal-title" id="tiBegin">Modal title</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <div id="divBegin"></div>
+            </div>
+            <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" onclick="modalBegin()">Begin section!</button>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class='row'>
+            <div class='col-sm-12'>
+                
+                <form class="form-horizontal" role="form">
+                    
+                    <label class="" id="lbl_Section"></label>
+                    
+                    <div class="form-group" id='form'>
+                    </div>
+
+
+                    <button type="submit" class="btn btn-primary" onclick="return onSubmit()" id="btnSubmit">Submit</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+<!-- Content will go here -->
+
+</body>
+</html>
