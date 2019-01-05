@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+    <script type="text/javascript" src="js/cognitutor.js"></script>
+
+    <script type="text/javascript" src="js/sessionvars.js"></script>
+
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
+    <style>
+        body {
+            padding-top: 40px;
+        }
+    </style>
+
+    <script>
+        pdfs = {
+            "1": "https://docs.google.com/viewer?url=https://s3.amazonaws.com/learnspeedpdfs/8ssDhJmcUTxo1hgZ.pdf",
+            "2": "https://docs.google.com/viewer?url=https://s3.amazonaws.com/learnspeedpdfs/4NK8ZWNpuAJV0IJf.pdf",
+            "3": "https://docs.google.com/viewer?url=https://s3.amazonaws.com/learnspeedpdfs/JkZ7paVVjuPBWOUU.pdf"
+        }
+
+        questions = getFirstTimeQuestions()
+        
+        $( document ).ready(function() {
+            fillFormQuestions(questions)
+
+            document.getElementById('btn_Print').href = pdfs[sessvars.whichTest]
+            document.getElementById('btn_CantPrint').href = pdfs[sessvars.whichTest]
+
+        });
+        
+        function btnPrint_Click() {
+            sessvars.print = 'Y';
+        }
+        
+        function btnCantPrint_Click() {
+            sessvars.print = 'N';
+        }
+        
+        function onSubmit() {
+            addQuestionsToSessVars(questions, 'firsttimequestions')
+            sessvars.disability = $('#tb_Disability').val();
+            sessvars.testAnxiety = $('#tb_TestAnxiety').val();
+            sessvars.pastTests = $('#ta_PastTests').val();
+            sessvars.slow = $('#tb_Slow').val();
+            sessvars.prefer = $('#tb_Prefer').val();
+
+            window.location.replace("test.html");
+            return false
+        }
+    </script>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class='row'>
+            <div class='col-lg-12 '>
+                
+                <form>
+                    <div id='divForm'></div>
+                    <div class="form-group pb-5">
+                        <label for="lbl_Prefer">
+                            <p>
+                                    Print this test before you begin. Having the printed test in front of you is very important for your test preparation. 
+                                    Click 'Print' if you can print the test. Print pages 14-55 and print double-sided. 
+                            </p>
+                            <p>
+                                    If you absolutely cannot print this test now or at another time, then click 'I can't print.' 
+                                    Use this test starting at page 14 and type your answers on this webpage.
+                            </p>
+                        </label>
+                        <a class='btn btn-primary btn-block active' target="_blank" role="button" class="form-control" id="btn_Print" onclick="btnPrint_Click();">Print</a>
+                        <a class='btn btn-secondary btn-block active' target="_blank" role="button" class="form-control" id="btn_CantPrint" onclick="btn_CantPrint_Click();">I can't print</a>
+                    </div>
+
+
+                    <button type="submit" class="btn btn-primary" onclick="return onSubmit()">Start Test!</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+<!-- Content will go here -->
+
+</body>
+</html>

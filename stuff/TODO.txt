@@ -1,0 +1,10 @@
+
+Be able to send the stats.html webpage to loni@cognitutor.com (it would be preferable to send it as html, because it is interactive in that you can click on the pie charts)
+Calculate final scores (18-36) on stats.html
+Calculate time left (including negative) and show on stats.html
+Include Questions and Answers to the pre- and post- questions on the stats.html page
+Include tips at the end of last assessment (ask Loni what is "end of last assessment")
+
+Handle case in stats.html where no questions were incorrect for a section (or where no questions were marked as hard/guessed for a section)
+Remove test button on test.html
+Make it so you can press the back button to go back?

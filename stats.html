@@ -72,28 +72,28 @@
         barLabels = {}
         for (var sectionIdx=0;sectionIdx<sections.length;sectionIdx++) {
             section = sections[sectionIdx]
-            userEnglishAnswers = sessvars.userAnswers[section]
-            correctEnglishAnswers = sessvars.correctAnswers[section]
+            userSectionAnswers = sessvars.userAnswers[section]
+            correctSectionAnswers = sessvars.correctAnswers[section]
             incorrectCounts = {}
             barIncorrectCounts = {}
             difficultyCounts = {}
-            for (var i=0;i<userEnglishAnswers.length;i++) {
-                if (userEnglishAnswers[i].length == 0) {
+            for (var i=0;i<userSectionAnswers.length;i++) {
+                if (userSectionAnswers[i].length == 0) {
                     answer = undefined
                 }
                 else {
-                    answer = userEnglishAnswers[i][0]
-                    difficulty = userEnglishAnswers[i][1]
+                    answer = userSectionAnswers[i][0]
+                    difficulty = userSectionAnswers[i][1]
                 }
-                correctAnswer = correctEnglishAnswers[i][0]
+                correctAnswer = correctSectionAnswers[i][0]
                 if (answer != correctAnswer) {
-                    label = toTitleCase(correctEnglishAnswers[i][1])
+                    label = toTitleCase(correctSectionAnswers[i][1])
                     if (!(label in incorrectCounts)) {
                         incorrectCounts[label] = 0
                     }
                     incorrectCounts[label] += 1
                     if (barSections.includes(section)) {
-                        barLabel = toTitleCase(correctEnglishAnswers[i][2])
+                        barLabel = toTitleCase(correctSectionAnswers[i][2])
                         if (!(barLabel in barIncorrectCounts)) {
                             barIncorrectCounts[barLabel] = 0
                         }
@@ -102,7 +102,7 @@
                     }
                 }
                 if (difficulty) {
-                    label = toTitleCase(correctEnglishAnswers[i][1])
+                    label = toTitleCase(correctSectionAnswers[i][1])
                     if (!(label in difficultyCounts)) {
                         difficultyCounts[label] = 0
                     }
@@ -238,7 +238,8 @@
                                 data: data,
                                 backgroundColor: default_colors_limited,
                                 sectionName: section,
-                                isDifficulty: diff_or_no_diff[diffIdx] != ""
+                                isDifficulty: diff_or_no_diff[diffIdx] != "",
+                                isLimited: true
                             }]
                         },
                         options: {
@@ -302,9 +303,18 @@
                     var value = chartData.datasets[0].data[idx];
                     var section = chartData.datasets[0].sectionName
                     var isDifficulty = chartData.datasets[0].isDifficulty
+                    var isLimited = chartData.datasets[0].isLimited
+
+                    if (isDifficulty) {
+                        diff_or_no_diff = "Diff"
+                    }
+                    else {
+                        diff_or_no_diff = ""
+                    }
+                    var canvas = document.getElementById("ch" + section + diff_or_no_diff)
 
                     if (label == 'Others') {
-                        
+                    
                         if (!isDifficulty) {
                             data = sessvars.incorrectCountsAllData[section]
                             labels = sessvars.incorrectCountsAllLabels[section]
@@ -313,7 +323,6 @@
                             data = sessvars.difficultyCountsAllData[section]
                             labels = sessvars.difficultyCountsAllLabels[section]
                         }
-
                         chart_.destroy();
                         var myChart = new Chart(ctx_, {
                             type: 'pie',
@@ -322,7 +331,9 @@
                                 datasets: [{
                                     data: data,
                                     backgroundColor: default_colors,
-                                    sectionName: section
+                                    sectionName: section,
+                                    isDifficulty: isDifficulty,
+                                    isLimited: false
                                 }]
                             },
                             options: {
@@ -332,6 +343,39 @@
                                 }
                             }
                         });
+                        canvas.addEventListener('click', handleEvent(myChart, ctx_));
+                    }
+                    else if (!isLimited) {
+                        if (!isDifficulty) {
+                            data = sessvars.incorrectCountsLimitedData[section]
+                            labels = sessvars.incorrectCountsLimitedLabels[section]
+                        }
+                        else {
+                            data = sessvars.difficultyCountsLimitedData[section]
+                            labels = sessvars.difficultyCountsLimitedLabels[section]
+                        }
+                        chart_.destroy();
+                        var myChart = new Chart(ctx_, {
+                            type: 'pie',
+                            data: {
+                                labels: labels,
+                                datasets: [{
+                                    data: data,
+                                    backgroundColor: default_colors_limited,
+                                    sectionName: section,
+                                    isDifficulty: isDifficulty,
+                                    isLimited: true
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                axes: {
+                                    display: false
+                                }
+                            }
+                        });
+                        canvas.addEventListener('click', handleEvent(myChart, ctx_));
+
                     }
                 }
             };

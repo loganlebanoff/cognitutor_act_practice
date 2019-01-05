@@ -36,7 +36,7 @@
         
         var testSections = ["English", "Math", "Break1", "Reading", "Science", "Break2", "Writing"]
         var timings = {
-            "English": 70,
+            "English": 6,
             "Math": 90,
             "Break1": 15,
             "Reading": 55,
@@ -81,7 +81,7 @@
                 var seconds = Math.floor((distance % (1000 * 60)) / 1000);
                     
                 // Output the result in an element with id="demo"
-                document.getElementById("lblTimer").innerHTML = minutes + "m " + seconds + "s ";
+                document.getElementById("lblTimer").innerHTML = minutes + "m " + seconds + "s remaining";
                     
                 // If the count down is over, write some text 
                 if (distance < 0) {
@@ -93,6 +93,10 @@
             else {
                 $("#modBegin").modal("show");
                 $("#lbl_Section").text(testSection);
+                $("#tiBegin").text(testSection);
+                $("#lbl_TestTimer").text(`${timing}m 0s remaining`);
+                $("#divBegin").html(`You have ${timing} minutes to complete this test. Have your test, read the directions, input your answers <b>on your computer</b>, and begin.`);
+                
 
                 for (i=0; i<curAnswers.length; i++) {
                     if (AE.includes(curAnswers[i][0])) {
@@ -163,9 +167,50 @@
             document.getElementById("btnSubmit").click();
         }
 
+        var fiveMinuteWarningDone = false
+
         function modalBegin() {
             $("#modBegin").modal("hide");
             //Start timer
+            var now = new Date().getTime();
+            var countDownDate = new Date();
+            countDownDate.setTime(now + (timings[testSection] * 60 * 1000));
+            countDownDate = countDownDate.getTime();
+
+            // Update the count down every 1 second
+            var x = setInterval(function() {
+
+            // Get todays date and time
+            var now = new Date().getTime();
+                
+            // Find the distance between now and the count down date
+            var distance = countDownDate - now;
+                
+            // Time calculations for days, hours, minutes and seconds
+            var minutes = Math.floor(distance / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                
+            // Output the result in an element with id="demo"
+            document.getElementById("lbl_TestTimer").innerHTML = minutes + "m " + seconds + "s remaining";
+
+            if ((!fiveMinuteWarningDone) && distance < 1000 * 60 * 5) {
+                fiveMinuteWarningDone = true
+                $("#modWarning").modal("show");
+                
+            }
+                
+            // If the count down is over, write some text 
+            if (distance < 0) {
+                clearInterval(x);
+                document.getElementById("lbl_TestTimer").innerHTML = "EXPIRED";
+                $('#btnShowAlert').click();
+            }
+            }, 1000);
+
+        }
+
+        function btnShowAlert_Click() {
+
         }
     </script>
 </head>
@@ -173,7 +218,7 @@
 <body>
 
     <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modAlert">
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modAlert" id="btnShowAlert" onclick="btnShowAlert_Click();">
         Launch demo modal
     </button>
     
@@ -182,18 +227,20 @@
         <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-            <h3 class="modal-title" id="tiAlert">Modal title</h5>
+            <h3 class="modal-title" id="tiAlert">Time is up</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
             </div>
             <div class="modal-body">
-                <div id="divAlert"></div>
+                <div id="divAlert">Your time is up. If you completed the test, then press the 'Done' button now. 
+                    If you did not complete the test, then press 'I'm not done', continue the test, and press the button 'Done' when you have completed. 
+                    It is important to complete the test in the time you need so we can prepare your time management</div>
                 <p id="lblTimer"></p>
             </div>
             <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btnStay">Stay on this section</button>
-            <button type="submit" class="btn btn-primary" onclick="modalSubmit()">Move on to next section</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btnStay">I'm not done</button>
+            <button type="submit" class="btn btn-primary" onclick="modalSubmit()">Done</button>
             </div>
         </div>
         </div>
@@ -204,7 +251,7 @@
         <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-            <h3 class="modal-title" id="tiBegin">Modal title</h5>
+            <h3 class="modal-title" id="tiBegin"></h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
@@ -213,7 +260,27 @@
                 <div id="divBegin"></div>
             </div>
             <div class="modal-footer">
-            <button type="submit" class="btn btn-primary" onclick="modalBegin()">Begin section!</button>
+            <button type="submit" class="btn btn-primary" onclick="modalBegin()">Begin!</button>
+            </div>
+        </div>
+        </div>
+    </div>
+    
+    <!-- Modal -->
+    <div class="modal fade" id="modWarning" tabindex="-1" role="dialog" aria-labelledby="lblWarning" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h3 class="modal-title" id="tiWarning"></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <div id="divWarning">You have 5 minutes remaining on the test.</div>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
             </div>
         </div>
         </div>
@@ -224,8 +291,9 @@
             <div class='col-sm-12'>
                 
                 <form class="form-horizontal" role="form">
+                    <h4 class="" id="lbl_TestTimer"></h4>
                     
-                    <label class="" id="lbl_Section"></label>
+                    <h2 class="" id="lbl_Section"></h2>
                     
                     <div class="form-group" id='form'>
                     </div>
