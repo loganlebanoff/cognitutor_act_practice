@@ -5,6 +5,8 @@
 <head>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
+    <script type="text/javascript" src="js/cognitutor.js"></script>
+
     <script type="text/javascript" src="js/sessionvars.js"></script>
 
 
@@ -34,19 +36,35 @@
         AE = ['A','B','C','D','E']
         FK = ['F','G','H','J','K']
         
-        var testSections = ["English", "Math", "Break1", "Reading", "Science", "Break2", "Writing"]
+        var testSections = ["English", "Math", "Break1", "Reading", "Science"]
         var timings = {
-            "English": 6,
+            "English": 45,
+            "Math": 60,
+            "Break1": 10,
+            "Reading": 35,
+            "Science": 35
+        };
+        var timingsAccomodation = {
+            "English": 70,
             "Math": 90,
             "Break1": 15,
             "Reading": 55,
-            "Science": 55,
-            "Break2": 5,
-            "Writing": 60
+            "Science": 55
         };
+        var prettyTestIndex = {
+            "English": 1,
+            "Math": 2,
+            "Reading": 3,
+            "Science": 4
+        }
 
         var testSection = testSections[sessvars.sectionIdx]
-        var timing = timings[testSection]
+        if (sessvars.accomodation == "Yes") {
+            var timing = timingsAccomodation[testSection]
+        }
+        else {
+            var timing = timings[testSection]
+        }
         
         if (!(testSection.includes("Break") || testSection.includes("Writing"))) {
             curAnswers = sessvars.correctAnswers[testSection]
@@ -60,7 +78,10 @@
                 $("#modAlert").modal("show");
                 $("#btnStay").hide();
                 $("#tiAlert").html("BREAK");
-                $("#divAlert").html(`Taking a ${timings[testSection]}-minute break.`);
+                $("#divAlert").html(`Put your calculator away. You will not be permitted to use it for the remaining tests. 
+                You will now have a ${timings[testSection]}-minute break. Testing will resume promptly ${timings[testSection]} minutes from now. 
+                If you return late, you will not be allowed to make up lost time. 
+                Remember, you may not use any electronic devices during the break.`);
 
                 var now = new Date().getTime();
                 var countDownDate = new Date();
@@ -81,7 +102,7 @@
                 var seconds = Math.floor((distance % (1000 * 60)) / 1000);
                     
                 // Output the result in an element with id="demo"
-                document.getElementById("lblTimer").innerHTML = minutes + "m " + seconds + "s remaining";
+                document.getElementById("lblTimer").innerHTML = "<b>" + minutes + "m " + seconds + "s remaining</b>";
                     
                 // If the count down is over, write some text 
                 if (distance < 0) {
@@ -95,7 +116,12 @@
                 $("#lbl_Section").text(testSection);
                 $("#tiBegin").text(testSection);
                 $("#lbl_TestTimer").text(`${timing}m 0s remaining`);
-                $("#divBegin").html(`You have ${timing} minutes to complete this test. Have your test, read the directions, input your answers <b>on your computer</b>, and begin.`);
+                instructions = `<b>You have ${timing} minutes to work on this test.</b> `
+                if (testSection == "Math") {
+                    instructions += `Do any figuring in your test booklet. `
+                }
+                instructions += `Turn to Test ${prettyTestIndex[testSection]}, read the directions carefully, input your answers <b>on your computer</b>, and begin work.`
+                $("#divBegin").html(instructions);
                 
 
                 for (i=0; i<curAnswers.length; i++) {
@@ -158,12 +184,13 @@
 
             sessvars.sectionIdx += 1
             if (sessvars.sectionIdx >= testSections.length) {
-                window.location = "stats.html";
+                window.location = "postquestions.html";
                 return false;
             }
         }
 
         function modalSubmit() {
+            sessvars.timeLeft[testSection] = 0
             document.getElementById("btnSubmit").click();
         }
 
@@ -191,7 +218,10 @@
             var seconds = Math.floor((distance % (1000 * 60)) / 1000);
                 
             // Output the result in an element with id="demo"
-            document.getElementById("lbl_TestTimer").innerHTML = minutes + "m " + seconds + "s remaining";
+            if (distance >= 0) {
+                document.getElementById("lbl_TestTimer").innerHTML = minutes + "m " + seconds + "s remaining";
+            }
+            sessvars.timeLeft[testSection] = minutes
 
             if ((!fiveMinuteWarningDone) && distance < 1000 * 60 * 5) {
                 fiveMinuteWarningDone = true
@@ -201,7 +231,7 @@
                 
             // If the count down is over, write some text 
             if (distance < 0) {
-                clearInterval(x);
+                // clearInterval(x);
                 document.getElementById("lbl_TestTimer").innerHTML = "EXPIRED";
                 $('#btnShowAlert').click();
             }
@@ -218,9 +248,9 @@
 <body>
 
     <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modAlert" id="btnShowAlert" onclick="btnShowAlert_Click();">
+    <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modAlert" id="btnShowAlert" onclick="btnShowAlert_Click();">
         Launch demo modal
-    </button>
+    </button> -->
     
     <!-- Modal -->
     <div class="modal fade" id="modAlert" tabindex="-1" role="dialog" aria-labelledby="lblAlert" aria-hidden="true" data-backdrop="static" data-keyboard="false">
@@ -236,6 +266,7 @@
                 <div id="divAlert">Your time is up. If you completed the test, then press the 'Done' button now. 
                     If you did not complete the test, then press 'I'm not done', continue the test, and press the button 'Done' when you have completed. 
                     It is important to complete the test in the time you need so we can prepare your time management</div>
+                <br>
                 <p id="lblTimer"></p>
             </div>
             <div class="modal-footer">
@@ -287,7 +318,7 @@
     </div>
 
     <div class="container">
-        <div class='row'>
+        <div class='row pb-5'>
             <div class='col-sm-12'>
                 
                 <form class="form-horizontal" role="form">

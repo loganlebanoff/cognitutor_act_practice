@@ -6,7 +6,7 @@ English
 4.	F; Punctuation 
 5.	B; Relevancy
 6.	J; Transition words
-7.	D; Relevancy, writer's goal
+7.	D; Relevancy, writer’s goal
 8.	F; Parallel structure
 9.	A; Be concise
 10.	H; Comma use
@@ -14,7 +14,7 @@ English
 12.	H; Transition words
 13.	D; Comma use
 14.	G; Apostrophes 
-15.	B; Writer's goal
+15.	B; Writer’s goal
 16.	G; Comma use
 17.	C; Punctuation
 18.	G; Organization
@@ -61,7 +61,7 @@ English
 59.	A; Relevancy
 60.	G; Organization
 61.	A; Be concise
-62.	G; Comma use
+62.	G Comma use
 63.	A; Comma use
 64.	G; Relevancy
 65.	D; Relevancy
@@ -174,7 +174,7 @@ Reading
 35.	B; Literal Comprehension; Natural Sciences
 36.	G; Vocab in Context; Natural Sciences
 37.	B; Vocab in Context; Natural Sciences
-38.	F; Literal Comprehension; Natural Sciences
+38.	F; Literal Comprehension; Natural Scienceson
 39.	A; Literal Comprehension; Natural Sciences
 40.	F; Literal Comprehension; Natural Sciences
 

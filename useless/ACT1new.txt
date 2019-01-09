@@ -40,7 +40,7 @@ English
 38.	H; Subject-verb agreement
 39.	D; Style/tone
 40.	F; Transition words
-41.	A; Add/revise/delete sentence
+41.	A; Add/delete/revise sentence
 42.	G; Pronoun agreement
 43.	D; Concise/not redundant
 44.	J; Reading comprehension
@@ -129,7 +129,7 @@ Math
 51.	D; Probability
 52.	F; Slope-intercept
 53.	D; Right triangles
-54.	J; Perimeter, area, and volume
+54.	J; Perimeter, area and volume
 55.	E; Circles
 56.	G; Circles
 57.	E; Interpreting graphs
@@ -138,7 +138,7 @@ Math
 60.	F; Sequences
 Reading
 1.	B; Structure of Passage; Prose Fiction
-2.	F; Author's Voice/Tone; Prose Fiction
+2.	F; Author’s Voice/Tone; Prose Fiction
 3.	B; Reasonable inference; Prose Fiction
 4.	J; Function of word/phrase; Prose Fiction
 5.	C; Inference; Prose Fiction
@@ -147,11 +147,11 @@ Reading
 8.	J; Evidence; Prose Fiction
 9.	C; Vocabulary; Prose Fiction
 10.	H; Detail; Prose Fiction
-11.	A; Author's Voice/Tone; Social Science
+11.	A; Author’s Voice/Tone; Social Science
 12.	H; Main Idea; Social Science
 13.	D; Evidence; Social Science
 14.	F; Evidence; Social Science
-15.	A; Author's Voice/Tone; Social Science
+15.	A; Author’s Voice/Tone; Social Science
 16.	J; Evidence; Social Science
 17.	D; Detail; Social Science
 18.	G; Detail; Social Science
@@ -159,8 +159,8 @@ Reading
 20.	G; Evidence; Social Science
 21.	C; Main Idea; Humanities
 22.	J; Detail; Humanities
-23.	B; Author's Voice/Tone; Humanities
-24.	G; Function of word/phrase; Humanities
+23.	B; Author’s Voice/Tone; Humanities
+24.	G; Function of phrase; Humanities
 25.	C; Detail; Humanities
 26.	F; Detail; Humanities
 27.	C; Main idea; Humanities
@@ -189,7 +189,7 @@ Science
 9.	C; Experimental design; Data Representation
 10.	J; Calculation; Data Representation
 11.	B; Inference; Research Summaries
-12.	J; Experimental design; Research Summaries
+12.	J; ExPerimental design; Research Summaries
 13.	D; Experimental design; Research Summaries
 14.	H; Inference; Research Summaries
 15.	A; Pattern; Research Summaries

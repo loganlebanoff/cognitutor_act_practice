@@ -22,6 +22,37 @@
     </style>
 
     <script>
+
+        function sleep(milliseconds) {
+            var start = new Date().getTime();
+            for (var i = 0; i < 1e7; i++) {
+                if ((new Date().getTime() - start) > milliseconds){
+                break;
+                }
+            }
+        }
+
+        function fillScale(items, section, correct_str, score) {
+            corrects = correct_str.split('-')
+            if (corrects.length > 1) {
+                lowEnd = parseInt(corrects[0])
+                highEnd = parseInt(corrects[1])
+                var list = [];
+                for (var i = lowEnd; i <= highEnd; i++) {
+                    list.push(i);
+                }
+                for (var i=0;i<list.length; i++) {
+                    items[section][list[i]] = score
+                }
+            }
+            else {
+                items[section][parseInt(corrects[0])] = score
+            }
+        }
+        function isWhitespace(str) {
+            return str.replace(/^\s+|\s+$/g, '').length == 0;
+        }
+
         questions = getPreQuestions()
         
         $( document ).ready(function() {
@@ -29,6 +60,8 @@
         });
         
         function onSubmit() {
+            sessvars.answersLoadDone = false
+            sessvars.scaleLoadDone = false
 
             addQuestionsToSessVars(questions, 'prequestions')
             sessvars.accomodation = $('#sel_Accomodation').val();
@@ -36,8 +69,18 @@
             
             $.get(`answers/ACT${sessvars.whichTest}.txt`, function(data) {
                 sessvars.answersRaw = data;
+                afterAnswersLoad()
+            });
+            $.get(`scoring_sheets/act${sessvars.whichTest}scalenew.txt`, function(data) {
+                sessvars.scaleRaw = data;
+                afterScaleLoad()
             });
 
+            return false
+
+        }
+
+        function afterAnswersLoad() {
             sessvars.sectionIdx = 0
 
             answers = {
@@ -75,13 +118,46 @@
                 "Reading": [],
                 "Science": []
             }
-            if (sessvars.whichTest == "1") {
-                window.location.replace("prequestions.html");
+            sessvars.timeLeft = {
+                "English": 0,
+                "Math": 0,
+                "Reading": 0,
+                "Science": 0
             }
-            else {
-                window.location.replace("test.html");
+            sessvars.answersLoadDone = true
+        }
+
+        function afterScaleLoad() {
+            scale = {
+                "English": {},
+                "Math": {},
+                "Reading": {},
+                "Science": {}
             }
-            return false
+            lines = sessvars.scaleRaw.match(/[^\r\n]+/g);
+            for (i=0; i<lines.length; i++) {
+                line = lines[i].trim()
+                if (line == '' || isNaN(line[0])) {
+                    continue
+                }
+                items = line.split(/(\s+)/)
+                filtered_items = []
+                for (var j=0; j<items.length; j++) {
+                    if (!isWhitespace(items[j])) {
+                        filtered_items.push(items[j])
+                    }
+                }
+                score = parseInt(items[0])
+                fillScale(scale, 'English', filtered_items[1], score)
+                fillScale(scale, 'Math', filtered_items[2], score)
+                fillScale(scale, 'Reading', filtered_items[3], score)
+                fillScale(scale, 'Science', filtered_items[4], score)
+            }
+            sessvars.scale = scale
+
+            window.location.replace("prequestions.html");
+            sessvars.scaleLoadDone = true
+            // return false
         }
     </script>
 </head>

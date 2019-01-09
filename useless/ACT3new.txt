@@ -87,7 +87,7 @@ Math
 9.	A; Solving equations
 10.	K; Statistics
 11.	C; Slope-intercept form
-12.	K; perimeter, area, and volume
+12.	K; Area, volume, and perimeter
 13.	B; Unknown angles
 14.	H; Inscribed angles
 15.	D; Systems of equations
@@ -102,7 +102,7 @@ Math
 24.	H; Solving equations
 25.	B; Percentages
 26.	G; Unknown angles
-27.	E; Perimeter, area, and volume
+27.	E; Perimeter, area, volume
 28.	H; Parabola
 29.	C; Complex numbers
 30.	G; Right triangles
@@ -140,7 +140,7 @@ Reading
 1.	A; Main idea; Prose Fiction
 2.	J; Literary comprehension; Prose Fiction
 3.	C; Literary comprehension; Prose Fiction
-4.	H; Literary devices; Prose Fiction
+4.	H Literary devices; Prose Fiction
 5.	B; Literary comprehension; Prose Fiction
 6.	J; Vocabulary; Prose Fiction
 7.	A; Primary purpose; Prose Fiction

@@ -1,6 +1,7 @@
 
 prequestions = [
     'Name',
+    'Tutor Email Address',
     'When are you scheduled to take the test?',
     'What score are you hoping to get?'
 ]
@@ -64,4 +65,16 @@ function addQuestionsToSessVars(questions, fieldName) {
         values.push($(`#tb_${i}`).val())
     }
     sessvars[fieldName] = values
+}
+
+function clone(src) {
+    myClone = Object.assign({}, src);
+    return myClone
+}
+
+function cloneAndRemoveProto(src) {
+    myClone = Object.assign({}, src);
+    delete myClone.$;
+    delete myClone.__proto__;
+    return myClone
 }

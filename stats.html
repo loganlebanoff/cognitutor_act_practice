@@ -5,7 +5,11 @@
 <head>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 
+    <script type="text/javascript" src="js/cognitutor.js"></script>
+
     <script type="text/javascript" src="js/sessionvars.js"></script>
+
+    <script src="https://smtpjs.com/v3/smtp.js"></script>
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
 
@@ -35,6 +39,92 @@
     </style>
 
     <script>
+
+        function createQuestionsAndAnswers(questions, fieldName) {
+            html = ``
+            for (var i=0; i<questions.length; i++) {
+                question = questions[i]
+                answer = sessvars[fieldName][i]
+                html += `
+                <p class="small" style="margin: 5px;"><b>${question}</b><br>${answer}</p>
+                `
+            }
+            return html
+        }
+        function createScores(sections, scores, timeLeft, questionsMissed) {
+            html = `
+            <table width="100%" style="margin: 0px;">
+                <tr>
+                    <td><h4></h4></td><td><h4><br>Score</h4><td><h4>Time<br>Left</h4></td><td><h4>Q's<br>missed</h4></td>
+                </tr>
+                <tr> 
+                    <td colspan="4"> <hr style="padding: 0px; margin: 0px;" /> </td>      
+                </tr>
+            `
+            for (var i=0; i<sections.length; i++) {
+                section = sections[i]
+                score = scores[i]
+                time = timeLeft[section]
+                qsMissed = questionsMissed[i]
+                html += `
+                    <tr>
+                        <td><h4>${section}</h4></td><td><h4>${score}</h4><td><h4>${time} min</h4></td><td><h4>${qsMissed}</h4></td>
+                    </tr>
+                `
+            }
+            html += `
+            </table
+            `
+            return html
+        }
+        function createTips() {
+            tips = [
+`Don’t cram the night before`,
+`Plan something exciting to do after the test to look forward to!`,
+`Don't get stuck so skip questions or go to end to just get started if you have to`,
+`Don't pay attention to other people. Maybe sit in the front if that's where there will be fewer distractions`,
+`Watch clock, but don't obsess over it`,
+`Have a consistent test routine: sleep at the same time a few days before the test, eat the same amount and foods the way you practiced, use the same calculator, get to the test early and know where you are going beforehand`,
+`You can take many more tests to get a better score so don't worry about this one!! We recommend students take at least 2 tests after tutoring (of ACT and SAT)! You will improve 🙂`,
+`Visualize doing well on test day: wake up, get breakfast, snack, calculator, ticket, drive to test site, sit down take test, watch clock, take break, finish feeling good and leave.`,
+`Don't talk to other students before test. They might make you nervous`,
+`Expect curveballs on the test. Skip questions if you don't know them`,
+`Practice using relaxation techniques during practice tests and on the real test:`
+            ]
+            techniques = [
+`Close your eyes.`,
+`Breathe in slowly to the count of seven and exhale to the count of seven.`,
+`Continue this slow breathing until you actually feel your body begin to relax. (Most people find that it takes 2 to 4 sequences.)`,
+`Open your eyes and give yourself a positive, very specific self-talk (i.e., "You're sure to do well. You studied hard. You’re doing the best you can. You succeeded at...") This whole procedure should take only about a minute and it's well worth the time.`
+            ]
+            html = `<ol>`
+            for (var i=0;i<tips.length;i++) {
+                html += `<li>${tips[i]}</li>`
+            }
+            html += `</ol>`
+            html += `<ol style="margin-left: 40px; margin-top: -15px" type="a">`
+            for (var i=0;i<techniques.length;i++) {
+                var chr = String.fromCharCode(97 + i);
+                html += `<li>${techniques[i]}</li>`
+            }
+            html += `</ol>`
+
+            return html
+        }
+        function average(arr) {
+            var sum, avg = 0;
+
+            // dividing by 0 will return Infinity
+            // arr must contain at least 1 element to use reduce
+            if (arr.length)
+            {
+                sum = arr.reduce(function(a, b) { return a + b; });
+                avg = sum / arr.length;
+            }
+            return avg
+        }
+        
+
         String.prototype.replaceAt=function(index, replacement) {
             return this.substr(0, index) + replacement+ this.substr(index + replacement.length);
         }
@@ -57,139 +147,114 @@
         var default_colors_limited = default_colors.slice(0,maxCategories).concat(['gray'])
         
         sections = ["English", "Math", "Science", "Reading"]
-        barSections = ["Reading", "Science"]
-        sessvars.incorrectCountsLimitedData = {}
-        sessvars.incorrectCountsLimitedLabels = {}
-        sessvars.incorrectCountsAllData = {}
-        sessvars.incorrectCountsAllLabels = {}
-        sessvars.difficultyCountsLimitedData = {}
-        sessvars.difficultyCountsLimitedLabels = {}
-        sessvars.difficultyCountsAllData = {}
-        sessvars.difficultyCountsAllLabels = {}
-        data = {}
-        labels = {}
-        barData = {}
-        barLabels = {}
-        for (var sectionIdx=0;sectionIdx<sections.length;sectionIdx++) {
-            section = sections[sectionIdx]
-            userSectionAnswers = sessvars.userAnswers[section]
-            correctSectionAnswers = sessvars.correctAnswers[section]
-            incorrectCounts = {}
-            barIncorrectCounts = {}
-            difficultyCounts = {}
-            for (var i=0;i<userSectionAnswers.length;i++) {
-                if (userSectionAnswers[i].length == 0) {
-                    answer = undefined
-                }
-                else {
-                    answer = userSectionAnswers[i][0]
-                    difficulty = userSectionAnswers[i][1]
-                }
-                correctAnswer = correctSectionAnswers[i][0]
-                if (answer != correctAnswer) {
-                    label = toTitleCase(correctSectionAnswers[i][1])
-                    if (!(label in incorrectCounts)) {
-                        incorrectCounts[label] = 0
+        charts = {}
+        ctxs = {}
+        $( document ).ready(function() {
+
+            sessvars.email_success = false
+            if (window.location.href.includes("?")) {
+                query = window.location.href.split('?')[1]
+                json_sessvars = decodeURIComponent(query)
+                object_sessvars = JSON.parse(json_sessvars)
+                sessvars = object_sessvars
+            }
+            else {
+                clonedSessVars = cloneAndRemoveProto(sessvars)
+                json_sessvars = JSON.stringify(clonedSessVars)
+                query = encodeURIComponent(json_sessvars)
+                link = window.location.href + "?" + query
+
+                Email.send({
+                    SecureToken : "70b6c0fa-b36e-44f0-bbca-c2de56ff8cd9",
+                    To : ['support@cognitutor.com', sessvars.prequestions[1]],
+                    From : "loganlebanoff@gmail.com",
+                    Subject : `${sessvars.prequestions[0]}'s ACT Practice Results`,
+                    Body : link
+                }).then( function(message) {
+                    // alert(message)
+                    if (message != "OK") {
+                        console.log(message)
+                        $("#divAlert").html(`There was an error while emailing your tutor your results. Please send the following link to your tutor's email:`)
+                        $("#tbErrorLink").val(link)
+                        $("#modAlert").modal("show");
                     }
-                    incorrectCounts[label] += 1
-                    if (barSections.includes(section)) {
-                        barLabel = toTitleCase(correctSectionAnswers[i][2])
-                        if (!(barLabel in barIncorrectCounts)) {
-                            barIncorrectCounts[barLabel] = 0
+                    else {
+                        sessvars.email_success = true
+                        $('#tstEmailSuccess').toast('show')
+                        console.log("Email success")
+                    }
+                }
+                );
+            }
+
+            
+            totalCorrect = []
+            totalDifficult = []
+            barSections = ["Reading", "Science"]
+            sessvars.incorrectCountsLimitedData = {}
+            sessvars.incorrectCountsLimitedLabels = {}
+            sessvars.incorrectCountsAllData = {}
+            sessvars.incorrectCountsAllLabels = {}
+            sessvars.difficultyCountsLimitedData = {}
+            sessvars.difficultyCountsLimitedLabels = {}
+            sessvars.difficultyCountsAllData = {}
+            sessvars.difficultyCountsAllLabels = {}
+            data = {}
+            labels = {}
+            barData = {}
+            barLabels = {}
+            for (var sectionIdx=0;sectionIdx<sections.length;sectionIdx++) {
+                numCorrect = 0
+                numDifficult = 0
+                section = sections[sectionIdx]
+                userSectionAnswers = sessvars.userAnswers[section]
+                correctSectionAnswers = sessvars.correctAnswers[section]
+                incorrectCounts = {}
+                barIncorrectCounts = {}
+                difficultyCounts = {}
+                for (var i=0;i<userSectionAnswers.length;i++) {
+                    if (userSectionAnswers[i].length == 0) {
+                        answer = undefined
+                    }
+                    else {
+                        answer = userSectionAnswers[i][0]
+                        difficulty = userSectionAnswers[i][1]
+                    }
+                    correctAnswer = correctSectionAnswers[i][0]
+                    if (answer != correctAnswer) {
+                        label = toTitleCase(correctSectionAnswers[i][1])
+                        if (!(label in incorrectCounts)) {
+                            incorrectCounts[label] = 0
                         }
-                        barIncorrectCounts[barLabel] += 1
-                        
+                        incorrectCounts[label] += 1
+                        if (barSections.includes(section)) {
+                            barLabel = toTitleCase(correctSectionAnswers[i][2])
+                            if (!(barLabel in barIncorrectCounts)) {
+                                barIncorrectCounts[barLabel] = 0
+                            }
+                            barIncorrectCounts[barLabel] += 1
+                            
+                        }
+                    }
+                    else {
+                        numCorrect += 1
+                    }
+                    if (difficulty) {
+                        numDifficult += 1
+                        label = toTitleCase(correctSectionAnswers[i][1])
+                        if (!(label in difficultyCounts)) {
+                            difficultyCounts[label] = 0
+                        }
+                        difficultyCounts[label] += 1
                     }
                 }
-                if (difficulty) {
-                    label = toTitleCase(correctSectionAnswers[i][1])
-                    if (!(label in difficultyCounts)) {
-                        difficultyCounts[label] = 0
-                    }
-                    difficultyCounts[label] += 1
-                }
-            }
-            // Create items array
-            var items = Object.keys(incorrectCounts).map(function(key) {
-                return [key, incorrectCounts[key]];
-            });
+                totalCorrect.push(numCorrect)
+                totalDifficult.push(numDifficult)
 
-            // Sort the array based on the second element
-            items.sort(function(first, second) {
-                return second[1] - first[1];
-            });
-
-            incorrectCountsAll = items
-
-            // Create a new array with only the first 5 items
-            incorrectCountsLimited = items.slice(0, maxCategories);
-            allOthers = items.slice(maxCategories)
-            total = 0
-            for (var i=0;i<allOthers.length;i++) {
-                total += allOthers[i][1]
-            }
-            incorrectCountsLimited = incorrectCountsLimited.concat([["Others", total]])
-
-            sessvars.incorrectCountsLimitedData[section] = []
-            sessvars.incorrectCountsLimitedLabels[section] = []
-            for (var i=0;i<incorrectCountsLimited.length;i++) {
-                item = incorrectCountsLimited[i]
-                sessvars.incorrectCountsLimitedData[section].push(item[1])
-                sessvars.incorrectCountsLimitedLabels[section].push(item[0])
-            }
-            
-            sessvars.incorrectCountsAllData[section] = []
-            sessvars.incorrectCountsAllLabels[section] = []
-            for (var i=0;i<incorrectCountsAll.length;i++) {
-                item = incorrectCountsAll[i]
-                sessvars.incorrectCountsAllData[section].push(item[1])
-                sessvars.incorrectCountsAllLabels[section].push(item[0])
-            }
-
-            
-            // Create items array
-            var items = Object.keys(difficultyCounts).map(function(key) {
-                return [key, difficultyCounts[key]];
-            });
-
-            // Sort the array based on the second element
-            items.sort(function(first, second) {
-                return second[1] - first[1];
-            });
-
-            difficultyCountsAll = items
-
-            // Create a new array with only the first 5 items
-            difficultyCountsLimited = items.slice(0, maxCategories);
-            allOthers = items.slice(maxCategories)
-            total = 0
-            for (var i=0;i<allOthers.length;i++) {
-                total += allOthers[i][1]
-            }
-            difficultyCountsLimited = difficultyCountsLimited.concat([["Others", total]])
-
-            sessvars.difficultyCountsLimitedData[section] = []
-            sessvars.difficultyCountsLimitedLabels[section] = []
-            for (var i=0;i<difficultyCountsLimited.length;i++) {
-                item = difficultyCountsLimited[i]
-                sessvars.difficultyCountsLimitedData[section].push(item[1])
-                sessvars.difficultyCountsLimitedLabels[section].push(item[0])
-            }
-            
-            sessvars.difficultyCountsAllData[section] = []
-            sessvars.difficultyCountsAllLabels[section] = []
-            for (var i=0;i<difficultyCountsAll.length;i++) {
-                item = difficultyCountsAll[i]
-                sessvars.difficultyCountsAllData[section].push(item[1])
-                sessvars.difficultyCountsAllLabels[section].push(item[0])
-            }
-
-
-            if (barSections.includes(section)) {
 
                 // Create items array
-                var items = Object.keys(barIncorrectCounts).map(function(key) {
-                    return [key, barIncorrectCounts[key]];
+                var items = Object.keys(incorrectCounts).map(function(key) {
+                    return [key, incorrectCounts[key]];
                 });
 
                 // Sort the array based on the second element
@@ -197,25 +262,134 @@
                     return second[1] - first[1];
                 });
 
-                // Create a new array with only the first 5 items
-                barIncorrectCounts = items
+                incorrectCountsAll = items
 
-                keys = Object.keys(barIncorrectCounts)
-                keys.sort()
-                barData[section] = []
-                barLabels[section] = []
-                for (var i=0;i<barIncorrectCounts.length;i++) {
-                    item = barIncorrectCounts[i]
-                    barData[section].push(item[1])
-                    barLabels[section].push(item[0])
+                // Create a new array with only the first 5 items
+                incorrectCountsLimited = items.slice(0, maxCategories);
+                allOthers = items.slice(maxCategories)
+                total = 0
+                for (var i=0;i<allOthers.length;i++) {
+                    total += allOthers[i][1]
+                }
+                incorrectCountsLimited = incorrectCountsLimited.concat([["Others", total]])
+
+                sessvars.incorrectCountsLimitedData[section] = []
+                sessvars.incorrectCountsLimitedLabels[section] = []
+                for (var i=0;i<incorrectCountsLimited.length;i++) {
+                    item = incorrectCountsLimited[i]
+                    sessvars.incorrectCountsLimitedData[section].push(item[1])
+                    sessvars.incorrectCountsLimitedLabels[section].push(item[0])
+                }
+                
+                sessvars.incorrectCountsAllData[section] = []
+                sessvars.incorrectCountsAllLabels[section] = []
+                for (var i=0;i<incorrectCountsAll.length;i++) {
+                    item = incorrectCountsAll[i]
+                    sessvars.incorrectCountsAllData[section].push(item[1])
+                    sessvars.incorrectCountsAllLabels[section].push(item[0])
+                }
+
+                
+                // Create items array
+                var items = Object.keys(difficultyCounts).map(function(key) {
+                    return [key, difficultyCounts[key]];
+                });
+
+                // Sort the array based on the second element
+                items.sort(function(first, second) {
+                    return second[1] - first[1];
+                });
+
+                difficultyCountsAll = items
+
+                // Create a new array with only the first 5 items
+                difficultyCountsLimited = items.slice(0, maxCategories);
+                allOthers = items.slice(maxCategories)
+                total = 0
+                for (var i=0;i<allOthers.length;i++) {
+                    total += allOthers[i][1]
+                }
+                difficultyCountsLimited = difficultyCountsLimited.concat([["Others", total]])
+
+                sessvars.difficultyCountsLimitedData[section] = []
+                sessvars.difficultyCountsLimitedLabels[section] = []
+                for (var i=0;i<difficultyCountsLimited.length;i++) {
+                    item = difficultyCountsLimited[i]
+                    sessvars.difficultyCountsLimitedData[section].push(item[1])
+                    sessvars.difficultyCountsLimitedLabels[section].push(item[0])
+                }
+                
+                sessvars.difficultyCountsAllData[section] = []
+                sessvars.difficultyCountsAllLabels[section] = []
+                for (var i=0;i<difficultyCountsAll.length;i++) {
+                    item = difficultyCountsAll[i]
+                    sessvars.difficultyCountsAllData[section].push(item[1])
+                    sessvars.difficultyCountsAllLabels[section].push(item[0])
+                }
+
+
+                if (barSections.includes(section)) {
+
+                    // Create items array
+                    var items = Object.keys(barIncorrectCounts).map(function(key) {
+                        return [key, barIncorrectCounts[key]];
+                    });
+
+                    // Sort the array based on the second element
+                    items.sort(function(first, second) {
+                        return second[1] - first[1];
+                    });
+
+                    // Create a new array with only the first 5 items
+                    barIncorrectCounts = items
+
+                    keys = Object.keys(barIncorrectCounts)
+                    keys.sort()
+                    barData[section] = []
+                    barLabels[section] = []
+                    for (var i=0;i<barIncorrectCounts.length;i++) {
+                        item = barIncorrectCounts[i]
+                        barData[section].push(item[1])
+                        barLabels[section].push(item[0])
+                    }
                 }
             }
-        }
 
-        charts = {}
-        ctxs = {}
-        $( document ).ready(function() {
-            a=0
+            
+
+            scores = []
+            questionsMissed = []
+            for (var i=0;i<totalCorrect.length;i++) {
+                section = sections[i]
+                correct = totalCorrect[i]
+                scores.push(sessvars.scale[section][correct])
+                totalQuestions = sessvars.correctAnswers[section].length
+                questionsMissed.push(totalQuestions - correct)
+            }
+            $('#divSectionScores').html(createScores(sections, scores, sessvars.timeLeft, questionsMissed))
+            final_score = average(scores)
+            $('#hScore').html(Math.round(final_score))
+            $('#hTestNumber').html(sessvars.whichTest)
+            $('#hTestDate').html(sessvars.prequestions[2])
+            $('#divTips').html(createTips())
+            
+
+
+
+            questionsHtml = createQuestionsAndAnswers(getPreQuestions(), 'prequestions')
+            if (!(sessvars.firsttimequestions == undefined || sessvars.firsttimequestions.length == 0)) {
+                questionsHtml += createQuestionsAndAnswers(getFirstTimeQuestions(), 'firsttimequestions')
+            }
+            questionsHtml += createQuestionsAndAnswers(getPostQuestions(), 'postquestions')
+            if (sessvars.print) {
+                printed = "Yes"
+            }
+            else {
+                printed = "No"
+            }
+            questionsHtml += `<p>Printed test?<br>${printed}`
+            $('#divQuestions').html(questionsHtml)
+
             for (var sectionIdx=0;sectionIdx<sections.length;sectionIdx++) {
                 section = sections[sectionIdx]
                 diff_or_no_diff = ["", "Diff"]
@@ -223,10 +397,16 @@
                     if (diff_or_no_diff[diffIdx] == "") {
                         data = sessvars.incorrectCountsLimitedData[section]
                         labels = sessvars.incorrectCountsLimitedLabels[section]
+                        if (questionsMissed[sectionIdx] == 0) {
+                            $('#div' + section).append('No questions missed. Amazing job!')
+                        }
                     }
                     else {
                         data = sessvars.difficultyCountsLimitedData[section]
                         labels = sessvars.difficultyCountsLimitedLabels[section]
+                        if (totalDifficult[sectionIdx] == 0) {
+                            $('#div' + section + "Diff").append('No questions marked as Hard/Guessed')
+                        }
                     }
                     var canvas = document.getElementById("ch" + section + diff_or_no_diff[diffIdx])
                     var ctx = canvas.getContext('2d');
@@ -381,6 +561,19 @@
             };
         }
 
+        function CopyToClipboard() {
+              /* Get the text field */
+            var copyText = document.getElementById("tbErrorLink");
+
+            /* Select the text field */
+            copyText.select();
+
+            /* Copy the text inside the text field */
+            document.execCommand("copy");
+
+            /* Alert the copied text */
+            // alert("Copied the text.");
+        }
         
         function onSubmit() {
         }
@@ -389,35 +582,108 @@
 
 <body>
 
+    
+
     <div class="container">
 
-        <div class='row pt-4 pb-3 border-between'>
+        <div class='row pt-4 border-between'>
+
+            
+            <!-- Modal -->
+            <div class="modal fade" id="modAlert" tabindex="-1" role="dialog" aria-labelledby="lblAlert" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+                    <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h3 class="modal-title" id="tiAlert">Error sending email</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- The text field -->
+                            <div id="divAlert"></div>
+                            <input type="text" value="" id="tbErrorLink"  autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+                            <!-- The button used to copy the text -->
+                            <button onclick="CopyToClipboard()">Copy Link</button>
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btnStay">I sent the email</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                
+            
+            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="tstEmailSuccess" data-delay="15000">
+                    <div class="toast-body">
+                        Your results were sent to your tutor at the email you provided and to CogniTutor!
+                    </div>
+                </div>
+        </div>
+
+        <div class='row pt-1 pb-3 border-between'>
             <div class='col-lg-6'>
+                <h4 class="text-center pb-1">Your Score:</h4>
+                <h1 class="text-center pb-5" id="hScore"></h1>
+                <div id="divSectionScores" class="pt-3 pb-5"></div>
+                <div class="row">
+                    <div class='col-lg-6'>
+                        <h4 class="text-center">Test Number</h4>
+                        <h4 id="hTestNumber" class="text-center"></h4>
+                    </div>
+                    <div class='col-lg-6'>
+                        <h4 class="text-center">Test Date</h4>
+                        <h4 id="hTestDate" class="text-center"></h4>
+                    </div>
+                </div>
+            </div>
+            <div class='col-lg-6'>
+                <div id="divQuestions"></div>
+            </div>
+        </div>
+
+        
+        <hr>
+
+        <div class='row pt-1 pb-3 border-between'>
+
+
+            <div class='col-lg-6'>
+                
                 <h3 class="text-center pb-3">English</h3>
                 
                 
                 <h5>Concepts Missed</h3>
+                    
+                <div id="divEnglish"></div>
                 <canvas id="chEnglish" width="400" height="400"></canvas>
                 <h5 class="pt-4">Concepts Hard/Guessed</h3>
+                    <div id="divEnglishDiff"></div>
                 <canvas id="chEnglishDiff" width="400" height="400"></canvas>
+                
             </div>
             <div class='col-lg-6'>
                 <h3 class="text-center pb-3">Math</h3>
                 
                 <h5>Concepts Missed</h3>
+                    <div id="divMath"></div>
                 <canvas id="chMath" width="400" height="400"></canvas>
                 <h5 class="pt-4">Concepts Hard/Guessed</h3>
+                    <div id="divMathDiff"></div>
                 <canvas id="chMathDiff" width="400" height="400"></canvas>
             </div>
         </div>
         <hr>
-        <div class='row pt-3 border-between'>
+        <div class='row pt-3 pb-3 border-between'>
             <div class='col-lg-6'>
                 <h3 class="text-center pb-3">Reading</h3>
 
                 <h5>Concepts Missed</h3>
+                    <div id="divReading"></div>
                 <canvas id="chReading" width="400" height="400"></canvas>
                 <h5 class="pt-4">Concepts Hard/Guessed</h3>
+                    <div id="divReadingDiff"></div>
                 <canvas id="chReadingDiff" width="400" height="400"></canvas>
                 <h5 class="pt-4">Passages Missed</h3>
                 <canvas id="barReading" width="400" height="200"></canvas>
@@ -426,17 +692,31 @@
                 <h3 class="text-center pb-3">Science</h3>
 
                 <h5>Concepts Missed</h3>
+                    <div id="divScience"></div>
                 <canvas id="chScience" width="400" height="400"></canvas>
                 <h5 class="pt-4">Concepts Hard/Guessed</h3>
+                    <div id="divScienceDiff"></div>
                 <canvas id="chScienceDiff" width="400" height="400"></canvas>
                 <h5 class="pt-4">Passages Missed</h3>
                 <canvas id="barScience" width="400" height="200"></canvas>
             </div>
         </div>
-        
-        <form>
-            <button type="submit" class="btn btn-primary" onclick="onSubmit()">Start Test!</button>
-        </form>
+        <hr>
+        <div class='row pt-5'>
+            <div class='col-lg-12'>
+                <div class='pb-4'>
+                    <img src="img/tips.png">
+                </div>
+                We suggest you take the real test at least 2 times (SAT and ACT) after tutoring.
+                <div id='divTips' class='pt-2 pb-5'>
+                </div>
+                
+                
+
+
+            </div>
+        </div>
+
 
     </div>
 

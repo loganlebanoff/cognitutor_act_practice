@@ -31,7 +31,10 @@
         questions = getFirstTimeQuestions()
         
         $( document ).ready(function() {
-            fillFormQuestions(questions)
+            if (sessvars.whichTest == "1") {
+                fillFormQuestions(questions)
+            }
+            
 
             document.getElementById('btn_Print').href = pdfs[sessvars.whichTest]
             document.getElementById('btn_CantPrint').href = pdfs[sessvars.whichTest]
@@ -47,7 +50,9 @@
         }
         
         function onSubmit() {
-            addQuestionsToSessVars(questions, 'firsttimequestions')
+            if (sessvars.whichTest == "1") {
+                addQuestionsToSessVars(questions, 'firsttimequestions')
+            }
             sessvars.disability = $('#tb_Disability').val();
             sessvars.testAnxiety = $('#tb_TestAnxiety').val();
             sessvars.pastTests = $('#ta_PastTests').val();
