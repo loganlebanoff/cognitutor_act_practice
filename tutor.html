@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+    <script type="text/javascript" src="js/cognitutor.js"></script>
+
+    <script type="text/javascript" src="js/sessionvars.js"></script>
+
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
+    <style>
+        body {
+            padding-top: 40px;
+        }
+    </style>
+
+    <script>
+
+        function onSubmit() {
+            sessvars.sessvars = $('#tb_Sessvars').val()
+            window.location.replace("stats.html");
+            return false
+        }
+    </script>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class='row'>
+            <div class='col-lg-12'>
+                
+                <form>
+                    <div id='divForm'></div>
+                    <div class="form-group">
+                        <label for="lbl_Sessvars">Copy and paste the text from the email in here:</label>
+                        <input type="text" class="form-control" id="tb_Sessvars" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+                    </div>
+
+
+                    <button type="submit" class="btn btn-primary" onclick="return onSubmit()">See results</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+<!-- Content will go here -->
+
+</body>
+</html>

@@ -152,8 +152,8 @@
         $( document ).ready(function() {
 
             sessvars.email_success = false
-            if (window.location.href.includes("?")) {
-                query = window.location.href.split('?')[1]
+            if (sessvars.sessvars != undefined) {
+                query = sessvars.sessvars
                 json_sessvars = decodeURIComponent(query)
                 object_sessvars = JSON.parse(json_sessvars)
                 sessvars = object_sessvars
@@ -162,20 +162,21 @@
                 clonedSessVars = cloneAndRemoveProto(sessvars)
                 json_sessvars = JSON.stringify(clonedSessVars)
                 query = encodeURIComponent(json_sessvars)
-                link = window.location.href + "?" + query
+                link = window.location.href.substring(0, window.location.href.lastIndexOf('/')) + '/tutor.html'
+                body = `To see your student's results, go to the following link and copy and paste the following text: <br>${link} <br><br><br> ${query}`
 
                 Email.send({
                     SecureToken : "70b6c0fa-b36e-44f0-bbca-c2de56ff8cd9",
                     To : ['support@cognitutor.com', sessvars.prequestions[1]],
                     From : "loganlebanoff@gmail.com",
                     Subject : `${sessvars.prequestions[0]}'s ACT Practice Results`,
-                    Body : link
+                    Body : body
                 }).then( function(message) {
                     // alert(message)
                     if (message != "OK") {
                         console.log(message)
-                        $("#divAlert").html(`There was an error while emailing your tutor your results. Please send the following link to your tutor's email:`)
-                        $("#tbErrorLink").val(link)
+                        $("#divAlert").html(`There was an error while emailing your tutor your results. Please send the following text to your tutor's email:`)
+                        $("#tbErrorLink").val(body.replace(/<br>/g, ''))
                         $("#modAlert").modal("show");
                     }
                     else {
@@ -604,7 +605,7 @@
                             <div id="divAlert"></div>
                             <input type="text" value="" id="tbErrorLink"  autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
                             <!-- The button used to copy the text -->
-                            <button onclick="CopyToClipboard()">Copy Link</button>
+                            <button onclick="CopyToClipboard()">Copy Text</button>
                         </div>
                         <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btnStay">I sent the email</button>

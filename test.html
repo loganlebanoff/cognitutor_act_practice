@@ -77,15 +77,17 @@
             if (testSection.includes("Break")) {
                 $("#modAlert").modal("show");
                 $("#btnStay").hide();
+                $("#btnDone").hide();
+                $("#btnSubmit").hide();
                 $("#tiAlert").html("BREAK");
                 $("#divAlert").html(`Put your calculator away. You will not be permitted to use it for the remaining tests. 
-                You will now have a ${timings[testSection]}-minute break. Testing will resume promptly ${timings[testSection]} minutes from now. 
+                You will now have a ${timing}-minute break. Testing will resume promptly ${timing} minutes from now. 
                 If you return late, you will not be allowed to make up lost time. 
                 Remember, you may not use any electronic devices during the break.`);
 
                 var now = new Date().getTime();
                 var countDownDate = new Date();
-                countDownDate.setTime(now + (timings[testSection] * 60 * 1000));
+                countDownDate.setTime(now + (timing * 60 * 1000));
                 countDownDate = countDownDate.getTime();
 
                 // Update the count down every 1 second
@@ -108,6 +110,7 @@
                 if (distance < 0) {
                     clearInterval(x);
                     document.getElementById("lblTimer").innerHTML = "EXPIRED";
+                    $("#btnDone").click()
                 }
                 }, 1000);
             }
@@ -195,13 +198,14 @@
         }
 
         var fiveMinuteWarningDone = false
+        var timeRanOutWarningDone = false
 
         function modalBegin() {
             $("#modBegin").modal("hide");
             //Start timer
             var now = new Date().getTime();
             var countDownDate = new Date();
-            countDownDate.setTime(now + (timings[testSection] * 60 * 1000));
+            countDownDate.setTime(now + (timing * 60 * 1000));
             countDownDate = countDownDate.getTime();
 
             // Update the count down every 1 second
@@ -230,7 +234,8 @@
             }
                 
             // If the count down is over, write some text 
-            if (distance < 0) {
+            if ((!timeRanOutWarningDone) && distance < 0) {
+                timeRanOutWarningDone = true
                 // clearInterval(x);
                 document.getElementById("lbl_TestTimer").innerHTML = "EXPIRED";
                 $('#btnShowAlert').click();
@@ -248,9 +253,9 @@
 <body>
 
     <!-- Button trigger modal -->
-    <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modAlert" id="btnShowAlert" onclick="btnShowAlert_Click();">
+    <button type="button" style="display: none;" class="btn btn-primary" data-toggle="modal" data-target="#modAlert" id="btnShowAlert" onclick="btnShowAlert_Click();">
         Launch demo modal
-    </button> -->
+    </button>
     
     <!-- Modal -->
     <div class="modal fade" id="modAlert" tabindex="-1" role="dialog" aria-labelledby="lblAlert" aria-hidden="true" data-backdrop="static" data-keyboard="false">
@@ -258,9 +263,6 @@
         <div class="modal-content">
             <div class="modal-header">
             <h3 class="modal-title" id="tiAlert">Time is up</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
             </div>
             <div class="modal-body">
                 <div id="divAlert">Your time is up. If you completed the test, then press the 'Done' button now. 
@@ -271,7 +273,7 @@
             </div>
             <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btnStay">I'm not done</button>
-            <button type="submit" class="btn btn-primary" onclick="modalSubmit()">Done</button>
+            <button type="submit" class="btn btn-primary" onclick="modalSubmit()" id="btnDone">Done</button>
             </div>
         </div>
         </div>
@@ -283,9 +285,6 @@
         <div class="modal-content">
             <div class="modal-header">
             <h3 class="modal-title" id="tiBegin"></h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
             </div>
             <div class="modal-body">
                 <div id="divBegin"></div>
@@ -303,9 +302,6 @@
         <div class="modal-content">
             <div class="modal-header">
             <h3 class="modal-title" id="tiWarning"></h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
             </div>
             <div class="modal-body">
                 <div id="divWarning">You have 5 minutes remaining on the test.</div>
@@ -317,13 +313,18 @@
         </div>
     </div>
 
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <div class="container-fluid">
+            <h4 class="" id="lbl_TestTimer"></h4>
+                
+        </div>
+    </nav>
+
     <div class="container">
-        <div class='row pb-5'>
+        <div class='row pb-5 pt-5'>
             <div class='col-sm-12'>
                 
                 <form class="form-horizontal" role="form">
-                    <h4 class="" id="lbl_TestTimer"></h4>
-                    
                     <h2 class="" id="lbl_Section"></h2>
                     
                     <div class="form-group" id='form'>

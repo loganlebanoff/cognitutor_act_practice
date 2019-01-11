@@ -53,7 +53,7 @@ function createQuestionHtml(question, idx) {
     html = `
     <div class="form-group">
         <label for="lbl_${idx}">${question}</label>
-        <input class="form-control" id="tb_${idx}">
+        <input class="form-control" id="tb_${idx}" required />
     </div>
     `
     return html
