@@ -77,13 +77,15 @@
             if (testSection.includes("Break")) {
                 $("#modAlert").modal("show");
                 $("#btnStay").hide();
-                $("#btnDone").hide();
+                // $("#btnDone").hide();
+                $("#btnDone").html("Ok");
                 $("#btnSubmit").hide();
                 $("#tiAlert").html("BREAK");
                 $("#divAlert").html(`Put your calculator away. You will not be permitted to use it for the remaining tests. 
                 You will now have a ${timing}-minute break. Testing will resume promptly ${timing} minutes from now. 
                 If you return late, you will not be allowed to make up lost time. 
-                Remember, you may not use any electronic devices during the break.`);
+                Remember, you may not use any electronic devices during the break.
+                <b>Please wait for the entire break to finish before continuing the test.<b>`);
 
                 var now = new Date().getTime();
                 var countDownDate = new Date();
@@ -193,6 +195,13 @@
         }
 
         function modalSubmit() {
+            if (testSection.includes("Break")) {
+                if (!sessvars.modalSubmitClicked) {
+                    sessvars.modalSubmitClicked = true
+                    alert("Please wait until the entire break is finished.")
+                    return
+                }
+            }
             sessvars.timeLeft[testSection] = 0
             document.getElementById("btnSubmit").click();
         }
